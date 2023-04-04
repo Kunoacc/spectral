@@ -1,6 +1,6 @@
-interface Measurement {
+export interface Measurement {
   assetId: number;
-  measurements: Record<string, number>
+  measurements: Map<any, any>
 }
 
-export interface Measurements extends Array<Measurement> {}
+export interface Measurements extends Array<Measurement> { }

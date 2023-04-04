@@ -22,7 +22,7 @@ export function convertToNested(array: Assets): AssetTree {
     if (asset.parentId) {
       const parent = dictionary.get(asset.parentId);
       if (parent) {
-        parent.children.push({
+        parent?.children?.push({
           ...asset,
           children: dictionary.get(asset.id)?.children || [],
         });

@@ -10,5 +10,8 @@
     {
       "path": "./tsconfig.vitest.json"
     }
+  ],
+  "include": [
+    "src/components/lineChart/index.d.tsts/charts/lineChart/index.d.ts"
   ]
 }

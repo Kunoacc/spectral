@@ -146,7 +146,7 @@ watch(
   { immediate: true }
 )
 
-// watch selected asset and set it in the store
+// reset selected asset before leaving the route
 onBeforeRouteLeave(() => {
   assetsStore.setSelectedAsset(null)
 })

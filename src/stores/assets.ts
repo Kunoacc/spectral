@@ -1,3 +1,4 @@
+import { Api } from '@/api'
 import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements'
 import type { Assets } from '@/interfaces/asset.interface'
 import { defineStore } from 'pinia'
@@ -13,6 +14,9 @@ export const useAssetsStore = defineStore('assets', () => {
   }
 
   async function fetchAssets() {
+    // we could use this to fetch from an API
+    // assets.value = await Api.assets.getAll()
+
     assets.value = []
     assets.value.push(
       ...[

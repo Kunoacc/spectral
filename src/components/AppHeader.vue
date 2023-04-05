@@ -46,8 +46,8 @@ function handleMenuItemClick({ key }: any) {
 
   &__active {
     background-color: rgba(0, 0, 0, 0.35);
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 0.25rem;
     display: flex;
     align-items: center;

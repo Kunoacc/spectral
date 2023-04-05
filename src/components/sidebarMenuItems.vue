@@ -23,12 +23,8 @@ export default defineComponent({
 <template>
   <template v-for="item in items" :key="item.id">
     <MenuItem :key="item.id" v-if="!item.children.length">{{ item.name }}</MenuItem>
-    <SubMenu
-      v-else
-      :key="item.id"
-      :title="item.name + ' Category'"
-      @title-click="submenuClickHandler"
-    >
+    <SubMenu v-else :key="item.id" :title="item.name"
+      @title-click="submenuClickHandler">
       <SidebarMenuItems
         :submenu-click-handler="submenuClickHandler"
         :items="(item.children as AssetTreeMeasurements[])"

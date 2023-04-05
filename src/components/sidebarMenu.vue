@@ -7,6 +7,7 @@ import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements';
 import { combineAssetsAndMeasurements } from '@/helpers/aggregateMeasurements';
 import { useAssetsStore } from '@/stores/assets';
 import { useRouter } from 'vue-router';
+import type { Key } from 'ant-design-vue/lib/_util/type';
 
 const measurementsStore = useMeasurementsStore()
 const assetStore = useAssetsStore()
@@ -25,6 +26,10 @@ function handleMenuItemClick({ key }: any) {
   push(`/assets/${key}`)
 }
 
+function handleSubMenuItemClick(e: MouseEvent, key: Key) {
+  if (key!== assetStore.selectedAsset?.id) push(`/assets/${key}`)
+}
+
 </script>
 
 <style lang="scss">
@@ -39,8 +44,13 @@ function handleMenuItemClick({ key }: any) {
       <div v-if="!menuItems?.children?.length" class="light">
         <p>Menu does not have items</p>
       </div>
-      <Menu v-else mode="inline" theme="light" @click="handleMenuItemClick" :selectedKeys="selectedMenuItem">
-        <SidebarMenuItems :items="(menuItems.children as AssetTreeMeasurements[])"></SidebarMenuItems>
+      <Menu v-else mode="inline" theme="light" 
+        @click="handleMenuItemClick"
+        :selectedKeys="selectedMenuItem">
+        <SidebarMenuItems 
+          :submenuClickHandler="handleSubMenuItemClick" 
+          :items="(menuItems.children as AssetTreeMeasurements[])"
+        ></SidebarMenuItems>
       </Menu>
     </LayoutSider>
   </Spin>

@@ -3,8 +3,6 @@ import { defineStore } from "pinia";
 import { onMounted, ref } from "vue";
 
 export const useAppStateStore = defineStore('appState', () => {
-  const isDrawerOpen = ref(false);
-  const loadingModules = ref([] as string[]);
 
   const colorPalettes = ref([
     {
@@ -51,17 +49,10 @@ export const useAppStateStore = defineStore('appState', () => {
     })
   }
 
-  function isLoading(module: string) {
-    return loadingModules.value.includes(module);
-  }
-
 
   onMounted(() => updatePalette(0));
 
   return {
-    isDrawerOpen,
-    loadingModules,
-    isLoading,
     updatePalette,
     colorPalettes
   }

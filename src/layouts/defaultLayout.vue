@@ -1,18 +1,19 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-import { Layout, LayoutHeader, Menu, LayoutContent, TypographyText } from 'ant-design-vue'
+import { Layout, LayoutContent } from 'ant-design-vue'
 import SidebarMenu from '@/components/sidebarMenu.vue'
+import AppHeader from '@/components/AppHeader.vue';
 </script>
+
+<style lang="scss">
+.text-white {
+  color: #fff;
+}
+</style>
 
 <style lang="scss" scoped>
 .layout {
   min-height: 100vh;
 }
-
-.text-white {
-  color: #fff;
-}
-
 .content {
   padding: 1rem;
 
@@ -27,11 +28,7 @@ import SidebarMenu from '@/components/sidebarMenu.vue'
 
 <template>
   <Layout class="layout">
-    <LayoutHeader>
-      <TypographyText strong class="text-white">Spectral</TypographyText>
-      <Menu theme="dark" mode="horizontal" defaultSelectedKeys="1"></Menu>
-    </LayoutHeader>
-
+    <AppHeader/>
     <LayoutContent class="content">
       <Layout class="content-container">
         <Suspense>

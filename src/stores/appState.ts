@@ -1,8 +1,11 @@
 import { ConfigProvider } from "ant-design-vue";
 import { defineStore } from "pinia";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import { changeAntdTheme, generateThemeColor } from "mini-dynamic-antd-theme";
 
 export const useAppStateStore = defineStore('appState', () => {
+
+  const activePalette = ref(null as typeof colorPalettes.value[number] | null)
 
   const colorPalettes = ref([
     {
@@ -42,18 +45,27 @@ export const useAppStateStore = defineStore('appState', () => {
     }
   ])
 
-  function updatePalette(palette: number) {
+  function setPalette(palette: number) {
     const paletteColors = colorPalettes.value[palette];
     ConfigProvider.config({
       theme: paletteColors
     })
+    changeAntdTheme(paletteColors.primaryColor);
+    activePalette.value = paletteColors;
   }
 
+  const completePalette = computed(() => ({
+    ...activePalette.value,
+    ...generateThemeColor(activePalette?.value?.primaryColor)
+  }))
 
-  onMounted(() => updatePalette(0));
+
+  onMounted(() => setPalette(0));
 
   return {
-    updatePalette,
-    colorPalettes
+    setPalette,
+    colorPalettes,
+    activePalette,
+    completePalette
   }
 })

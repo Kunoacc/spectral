@@ -2,6 +2,7 @@
 import LineChart from '@/components/lineChart/index.vue';
 import { aggregateMeasurements, combineAssetsAndMeasurements, type AssetTreeMeasurements } from '@/helpers/aggregateMeasurements';
 import { traverseData } from '@/helpers/traverseData';
+import { useAppStateStore } from '@/stores/appState';
 import { useAssetsStore } from '@/stores/assets';
 import { useMeasurementsStore } from '@/stores/measurements';
 import type { ChartData } from 'chart.js';
@@ -11,6 +12,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const assetsStore = useAssetsStore();
 const measurementStore = useMeasurementsStore();
+const appStateStore = useAppStateStore();
 
 const defaultAssetIndex = ref(parseInt(route.params?.id as string) || 0);
 
@@ -90,7 +92,7 @@ const chartData = computed(() => ({
       data: (Array.from(processedData.value?.values())),
       fill: false,
       borderWidth: 2,
-      borderColor: '#000000',
+      borderColor: appStateStore.completePalette.primaryColor,
       backgroundColor: 'transparent',
       pointRadius: 2,
       showLine: true,

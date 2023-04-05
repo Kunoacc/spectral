@@ -19,7 +19,7 @@ export function convertToNested(array: Assets): AssetTree {
 
   // step through the array again and add the children to their parents
   for (const asset of array) {
-    if (asset.parentId) {
+    if (asset.parentId !== undefined) {
       const parent = dictionary.get(asset.parentId)
       if (parent) {
         parent?.children?.push({

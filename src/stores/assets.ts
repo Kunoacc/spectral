@@ -12,17 +12,18 @@ export const useAssetsStore = defineStore('assets', () => {
     selectedAsset.value = asset
   }
 
-  function fetchAssets() {
-    assets.value = [
-      {
+  async function fetchAssets() {
+    assets.value = []
+    assets.value.push(
+      ...[{
         "id": 0,
         "name": "Asset 0",
-        "parentId": null
+        "parentId": undefined
       },
       {
         "id": 1,
         "name": "Asset 1",
-        "parentId": null
+        "parentId": undefined
       },
       {
         "id": 2,
@@ -38,11 +39,11 @@ export const useAssetsStore = defineStore('assets', () => {
         "id": 4,
         "name": "Asset 4",
         "parentId": 3
-      }
-    ]
+      }]
+    )
   }
 
-  onMounted(fetchAssets);
+  onMounted(async () => await fetchAssets());
 
   return {
     assets,

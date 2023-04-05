@@ -5,7 +5,7 @@ import { onMounted, ref } from "vue";
 export const useMeasurementsStore = defineStore('measurements', () => {
   const measurements = ref([] as Measurements);
 
-  function fetchMeasurements() {
+  async function fetchMeasurements() {
     measurements.value = [
       {
         "assetId": 0,
@@ -61,7 +61,7 @@ export const useMeasurementsStore = defineStore('measurements', () => {
     ]
   }
 
-  onMounted(fetchMeasurements);
+  onMounted(async () => await fetchMeasurements());
 
   return {
     measurements,

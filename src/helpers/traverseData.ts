@@ -2,6 +2,8 @@ import type { AssetTreeMeasurements } from "./aggregateMeasurements";
 
 /**
  * This function traverses the data supplied in search of the node id supplied
+ * @param data The data to traverse
+ * @param id The id of the node to find
  */
 export function traverseData(data: AssetTreeMeasurements, id: number): AssetTreeMeasurements | null {
   if (data.id === id) {

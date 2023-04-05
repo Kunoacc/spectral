@@ -73,7 +73,7 @@ export function aggregateMeasurements(
     }
     return newAggregateMeasurements
   }
-  return {}
+  return new Map();
 }
 
 /**

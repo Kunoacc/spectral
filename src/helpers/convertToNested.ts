@@ -13,7 +13,7 @@ export function convertToNested(array: Assets): AssetTree {
     dictionary.set(asset.id, {
       ...asset,
       children: [],
-      isChild: asset.parentId !== null,
+      isChild: asset.parentId !== undefined,
     });
   }
 

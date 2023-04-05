@@ -9,7 +9,7 @@ Chart.register(LineWithLineController, LineWithLineElement, ...registerables)
 
 const props = defineProps<{
   chartData: ChartData<"lineWithLine">,
-  chartOptions: ChartOptions<"lineWithLine">,
+  chartOptions: ChartOptions<"line">,
 }>();
 
 const LineWithLineChart = defineChartComponent('LineWithLineChart', 'lineWithLine')

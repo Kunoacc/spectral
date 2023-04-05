@@ -15,10 +15,11 @@ declare module '@vue/runtime-core' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
+    LineChart: typeof import('./src/components/lineChart/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SidebarMenu: typeof import('./src/components/sidebar-menu.vue')['default']
-    SidebarMenuItems: typeof import('./src/components/sidebar-menu-items.vue')['default']
+    SidebarMenu: typeof import('./src/components/sidebarMenu.vue')['default']
+    SidebarMenuItems: typeof import('./src/components/sidebarMenuItems.vue')['default']
     TheWelcome: typeof import('./src/components/TheWelcome.vue')['default']
     WelcomeItem: typeof import('./src/components/WelcomeItem.vue')['default']
   }

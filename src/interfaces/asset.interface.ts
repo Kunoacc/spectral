@@ -1,7 +1,7 @@
 export interface Asset {
   id: number;
   name: string;
-  parentId: number;
+  parentId: number | undefined;
 }
 
 export interface Assets extends Array<Asset> { }
@@ -10,6 +10,6 @@ export interface AssetTree {
   id: number;
   name: string;
   children: AssetTree[];
-  parentId?: number | null;
+  parentId?: number | undefined;
   isChild?: boolean;
 }

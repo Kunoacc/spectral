@@ -25,7 +25,6 @@ export function combineAssetsAndMeasurements(assets: Assets, measurements: Measu
 
   // convert the flat array to a nested object
   const nestedAssets = convertToNested(combinedMeasurements) as unknown as AssetTreeMeasurements;
-
   return nestedAssets;
 }
 
@@ -37,54 +36,44 @@ export function combineAssetsAndMeasurements(assets: Assets, measurements: Measu
  * @param value 
  * @returns 
  */
-function aggregateMeasurements(
+export function aggregateMeasurements(
   assetMeasurement: AssetTreeMeasurements,
 ) {
-  // handle edgecase of asset having no children and no measurements
-  if (assetMeasurement.children.length && assetMeasurement?.measurements) {
-    return assetMeasurement.measurements;
-  }
-
   // handle edgecase of asset having children but no measurements
-  if (assetMeasurement.children.length && !assetMeasurement?.measurements) {
-    throw new Error('Asset has children but no measurements')
+  if (assetMeasurement?.children?.length && !assetMeasurement?.measurements?.size) {
+    console.error('Asset has children but no measurements')
   }
 
   // handle edgecase of asset having no children but measurements
-  if (!assetMeasurement.children.length && !assetMeasurement?.measurements) {
-    throw new Error('Asset has no children and no measurements')
+  if (!assetMeasurement?.children?.length && !assetMeasurement?.measurements?.size) {
+    console.error('Asset has no children and no measurements')
   }
-  // if the asset has children, but no measurements of its own, we need to sum the measurements of its children
-  if (assetMeasurement.children.length) {
-    const aggregatedMeasurements = new Map();
-    handleAssetMeasurementChildren(aggregatedMeasurements, assetMeasurement.children as unknown as AssetTreeMeasurements[]);
-    return aggregatedMeasurements;
-  }
-  return {}
-}
 
-/**
- * This function takes a map and an array of assets and sums the measurements of the assets and its children
- * @param value 
- * @param children 
- */
-function handleAssetMeasurementChildren(value: Map<any, number>, children: AssetTreeMeasurements[]) {
-  // loop through the children and check if they have measurements
-  for (const child of children) {
-    
-    if (child.measurements) {
-      // if the child has measurements, we need to add them to the map
-      const childAssetMeasurements = aggregateMeasurements(child) as Map<any, any>;
-      for (const [date, occurences] of Object.entries(childAssetMeasurements)) {
-        if (value.has(date)) {
-          const currentValue = value.get(date);
-          value.set(date, currentValue as number + occurences);
-        } else {
-          value.set(date, occurences);
+  if (assetMeasurement?.measurements?.size) {
+    return assetMeasurement.measurements
+  };
+
+  // if the asset has children, but no measurements of its own, we need to sum the measurements of its children
+  if (assetMeasurement?.children?.length) {
+    const newAggregateMeasurements = new Map();
+    const children = assetMeasurement.children as AssetTreeMeasurements[];
+    for (const child of children) {
+      if (child.measurements) {
+        // if the child has measurements, we need to add them to the map
+        const childAssetMeasurements = aggregateMeasurements(child) as Map<any, any>;
+        for (const [date, occurences] of childAssetMeasurements.entries()) {
+          if (newAggregateMeasurements.has(date)) {
+            const currentValue = newAggregateMeasurements.get(date);
+            newAggregateMeasurements.set(date, currentValue as number + occurences);
+          } else {
+            newAggregateMeasurements.set(date, occurences);
+          }
         }
       }
     }
+    return newAggregateMeasurements
   }
+  return {}
 }
 
 /**
@@ -102,7 +91,8 @@ function groupByDate(measurementValues: Measurement['measurements']) {
       const keyValue = parseInt(newMeasurements.get(key));
       newMeasurements.set(key, keyValue + measurementValues.get(date));
     } else {
-      newMeasurements.set(key, measurementValues.get(date));
+      // @ts-ignore
+      newMeasurements.set(key, measurementValues[date]);
     }
   }
 

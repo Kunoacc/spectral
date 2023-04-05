@@ -36,7 +36,7 @@ export function convertToNested(array: Assets): AssetTree {
 
   // create a fake parent for the root elements and return it
   return {
-    id: 0,
+    id: 0.1,
     name: "root",
     children: rootElements,
   };

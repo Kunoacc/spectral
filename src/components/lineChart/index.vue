@@ -20,7 +20,7 @@ const { chartData, chartOptions } = toRefs(props);
 import { defineComponent, toRefs } from "vue";
 
 export default defineComponent({
-  name: 'LineChart',
+  name: 'CustomLineChart',
 })
 </script>
 

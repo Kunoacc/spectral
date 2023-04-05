@@ -1,6 +1,6 @@
 # spectral
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a test for Spectral. 
 
 ## Recommended IDE Setup
 

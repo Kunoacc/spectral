@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import { Menu, LayoutSider, Spin } from 'ant-design-vue'
-import { computed } from 'vue';
-import SidebarMenuItems from './SidebarMenuItems.vue';
-import { useMeasurementsStore } from '@/stores/measurements';
-import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements';
-import { combineAssetsAndMeasurements } from '@/helpers/aggregateMeasurements';
-import { useAssetsStore } from '@/stores/assets';
-import { useRouter } from 'vue-router';
-import type { Key } from 'ant-design-vue/lib/_util/type';
+import { computed } from 'vue'
+import SidebarMenuItems from './SidebarMenuItems.vue'
+import { useMeasurementsStore } from '@/stores/measurements'
+import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements'
+import { combineAssetsAndMeasurements } from '@/helpers/aggregateMeasurements'
+import { useAssetsStore } from '@/stores/assets'
+import { useRouter } from 'vue-router'
+import type { Key } from 'ant-design-vue/lib/_util/type'
 
 const measurementsStore = useMeasurementsStore()
 const assetStore = useAssetsStore()
-const { push } = useRouter();
+const { push } = useRouter()
 
 const menuItems = computed(() =>
   combineAssetsAndMeasurements(assetStore.assets, measurementsStore.measurements)
@@ -27,9 +27,8 @@ function handleMenuItemClick({ key }: any) {
 }
 
 function handleSubMenuItemClick(e: MouseEvent, key: Key) {
-  if (key!== assetStore.selectedAsset?.id) push(`/assets/${key}`)
+  if (key !== assetStore.selectedAsset?.id) push(`/assets/${key}`)
 }
-
 </script>
 
 <style lang="scss">
@@ -44,11 +43,15 @@ function handleSubMenuItemClick(e: MouseEvent, key: Key) {
       <div v-if="!menuItems?.children?.length" class="light">
         <p>Menu does not have items</p>
       </div>
-      <Menu v-else mode="inline" theme="light" 
+      <Menu
+        v-else
+        mode="inline"
+        theme="light"
         @click="handleMenuItemClick"
-        :selectedKeys="selectedMenuItem">
-        <SidebarMenuItems 
-          :submenuClickHandler="handleSubMenuItemClick" 
+        :selectedKeys="selectedMenuItem"
+      >
+        <SidebarMenuItems
+          :submenuClickHandler="handleSubMenuItemClick"
           :items="(menuItems.children as AssetTreeMeasurements[])"
         ></SidebarMenuItems>
       </Menu>

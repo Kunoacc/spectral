@@ -1,34 +1,33 @@
-import { API_BASE_URL } from "@/constants";
-
+import { API_BASE_URL } from '@/constants'
 
 export interface HttpResponse<T> extends Response {
-  parsedBody?: T;
+  parsedBody?: T
 }
 
-type PostPathGenerator = (basePath: string) => string;
+type PostPathGenerator = (basePath: string) => string
 
-export type HttpClient = <T>(req: RequestInfo) => Promise<HttpResponse<T>>;
+export type HttpClient = <T>(req: RequestInfo) => Promise<HttpResponse<T>>
 
 export type ClientGet = <T>(
   path: string | PostPathGenerator,
   filters?: Record<string, any>,
   isBase?: boolean,
   headers?: Headers
-) => Promise<HttpResponse<T>>;
+) => Promise<HttpResponse<T>>
 
 export type ClientPost = <T, E>(
   path: string | PostPathGenerator,
   body?: E | undefined,
   isBase?: boolean,
   headers?: Headers
-) => Promise<HttpResponse<T>>;
+) => Promise<HttpResponse<T>>
 
 export type ClientPatch = <T, E>(
   path: string | PostPathGenerator,
   body?: E | undefined,
   isBase?: boolean,
   headers?: Headers
-) => Promise<HttpResponse<T>>;
+) => Promise<HttpResponse<T>>
 
 /**
  * This is the base method for API calls in the project.
@@ -37,19 +36,17 @@ export type ClientPatch = <T, E>(
  * @param request  - an instance of `RequestInfo` or a string url
  * @returns A promisified instance of `HttpResponse`
  */
-export async function http<T>(
-  request: RequestInfo
-): Promise<HttpResponse<T>> {
-  const response: HttpResponse<T> = await fetch(request);
+export async function http<T>(request: RequestInfo): Promise<HttpResponse<T>> {
+  const response: HttpResponse<T> = await fetch(request)
   //@ts-ignore
-  response.parsedBody = await response.json();
+  response.parsedBody = await response.json()
 
   if (!response.ok) {
-    console.error(response.parsedBody);
-    throw response.parsedBody;
+    console.error(response.parsedBody)
+    throw response.parsedBody
   }
 
-  return response;
+  return response
 }
 
 /**
@@ -69,23 +66,23 @@ export async function get<T>(
   headers: Headers = new Headers({})
 ): Promise<HttpResponse<T>> {
   const args: RequestInit = {
-    method: "GET",
+    method: 'GET',
     headers: {
-      ...(headers && headers),
-    },
-  };
-
-  const url = new URL(
-    typeof path === "string" ? path : path(API_BASE_URL),
-    shouldIncludeBaseUrl ? API_BASE_URL : undefined
-  );
-  for (const key in filters) {
-    if (Object.prototype.hasOwnProperty.call(filters, key) && filters[key]) {
-      url.searchParams.append(key, filters[key]);
+      ...(headers && headers)
     }
   }
 
-  return await http<T>(new Request(url.toString(), args));
+  const url = new URL(
+    typeof path === 'string' ? path : path(API_BASE_URL),
+    shouldIncludeBaseUrl ? API_BASE_URL : undefined
+  )
+  for (const key in filters) {
+    if (Object.prototype.hasOwnProperty.call(filters, key) && filters[key]) {
+      url.searchParams.append(key, filters[key])
+    }
+  }
+
+  return await http<T>(new Request(url.toString(), args))
 }
 
 /**
@@ -106,20 +103,20 @@ export async function post<T, E>(
 ): Promise<HttpResponse<T>> {
   const args: RequestInit = {
     ...(body && { body: JSON.stringify(body) }),
-    method: "POST",
+    method: 'POST',
     headers: {
-      Accept: "application/json",
-      ...(body && { "Content-Type": "application/json" }),
-      ...(headers && headers),
-    },
-  };
+      Accept: 'application/json',
+      ...(body && { 'Content-Type': 'application/json' }),
+      ...(headers && headers)
+    }
+  }
 
   const url = new URL(
-    typeof path === "string" ? path : path(API_BASE_URL),
+    typeof path === 'string' ? path : path(API_BASE_URL),
     shouldIncludeBaseUrl ? API_BASE_URL : undefined
-  );
+  )
 
-  return await http<T>(new Request(url.toString(), args));
+  return await http<T>(new Request(url.toString(), args))
 }
 
 /**
@@ -140,16 +137,16 @@ export async function patch<T, E>(
 ): Promise<HttpResponse<T>> {
   const args: RequestInit = {
     ...(body && { body: JSON.stringify(body) }),
-    method: "PATCH",
+    method: 'PATCH',
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...(headers && headers),
-    },
-  };
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...(headers && headers)
+    }
+  }
   const url = new URL(
-    typeof path === "string" ? path : path(API_BASE_URL),
+    typeof path === 'string' ? path : path(API_BASE_URL),
     shouldIncludeBaseUrl ? API_BASE_URL : undefined
-  );
-  return await http<T>(new Request(url.toString(), args));
+  )
+  return await http<T>(new Request(url.toString(), args))
 }

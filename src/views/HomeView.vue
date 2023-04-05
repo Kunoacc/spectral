@@ -1,5 +1,4 @@
-<script setup lang="ts">
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped>
 .container {
@@ -24,7 +23,7 @@
 
 <template>
   <main class="container">
-   <h1 class="page-title">No Asset Selected</h1>
+    <h1 class="page-title">No Asset Selected</h1>
     <p>Please select an asset from the sidebar.</p>
   </main>
 </template>

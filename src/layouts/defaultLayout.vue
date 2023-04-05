@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Layout, LayoutContent } from 'ant-design-vue'
 import SidebarMenu from '@/components/SidebarMenu.vue'
-import AppHeader from '@/components/AppHeader.vue';
+import AppHeader from '@/components/AppHeader.vue'
 </script>
 
 <style lang="scss">
@@ -28,17 +28,16 @@ import AppHeader from '@/components/AppHeader.vue';
 
 <template>
   <Layout class="layout">
-    <AppHeader/>
+    <AppHeader />
     <LayoutContent class="content">
       <Layout class="content-container">
         <Suspense>
-          <SidebarMenu/>
+          <SidebarMenu />
         </Suspense>
         <LayoutContent>
           <slot />
         </LayoutContent>
       </Layout>
-
     </LayoutContent>
   </Layout>
 </template>

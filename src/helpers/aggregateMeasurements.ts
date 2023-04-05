@@ -1,14 +1,14 @@
-import type { Asset, Assets, AssetTree } from "@/interfaces/asset.interface";
-import type { Measurements, Measurement } from "@/interfaces/measurements.interface";
-import { format } from "date-fns";
-import { convertToNested } from "./convertToNested";
+import type { Asset, Assets, AssetTree } from '@/interfaces/asset.interface'
+import type { Measurements, Measurement } from '@/interfaces/measurements.interface'
+import { format } from 'date-fns'
+import { convertToNested } from './convertToNested'
 
 export type AssetMeasurements = Asset & {
-  measurements?: Measurement['measurements'];
+  measurements?: Measurement['measurements']
 }
 
 export type AssetTreeMeasurements = AssetTree & {
-  measurements: Measurement['measurements'];
+  measurements: Measurement['measurements']
 }
 
 /**
@@ -18,27 +18,28 @@ export function combineAssetsAndMeasurements(assets: Assets, measurements: Measu
   const combinedMeasurements = assets.map((asset) => {
     const combinedAssetMeasurements: AssetMeasurements = {
       ...asset,
-      measurements: groupByDate(measurements.filter((measurement) => measurement.assetId === asset.id)[0]?.measurements || {})
+      measurements: groupByDate(
+        measurements.filter((measurement) => measurement.assetId === asset.id)[0]?.measurements ||
+          {}
+      )
     }
-    return combinedAssetMeasurements;
+    return combinedAssetMeasurements
   })
 
   // convert the flat array to a nested object
-  const nestedAssets = convertToNested(combinedMeasurements) as unknown as AssetTreeMeasurements;
-  return nestedAssets;
+  const nestedAssets = convertToNested(combinedMeasurements) as unknown as AssetTreeMeasurements
+  return nestedAssets
 }
 
 /**
  * this function takes an asset and returns a new object with the measurements of the asset and its children
- * @param assetMeasurement 
- * @param parentId 
- * @param sum 
- * @param value 
- * @returns 
+ * @param assetMeasurement
+ * @param parentId
+ * @param sum
+ * @param value
+ * @returns
  */
-export function aggregateMeasurements(
-  assetMeasurement: AssetTreeMeasurements,
-) {
+export function aggregateMeasurements(assetMeasurement: AssetTreeMeasurements) {
   // handle edgecase of asset having children but no measurements
   if (assetMeasurement?.children?.length && !assetMeasurement?.measurements?.size) {
     console.error('Asset has children but no measurements')
@@ -51,50 +52,50 @@ export function aggregateMeasurements(
 
   if (assetMeasurement?.measurements?.size) {
     return assetMeasurement.measurements
-  };
+  }
 
   // if the asset has children, but no measurements of its own, we need to sum the measurements of its children
   if (assetMeasurement?.children?.length) {
-    const newAggregateMeasurements = new Map();
-    const children = assetMeasurement.children as AssetTreeMeasurements[];
+    const newAggregateMeasurements = new Map()
+    const children = assetMeasurement.children as AssetTreeMeasurements[]
     for (const child of children) {
       if (child.measurements) {
         // if the child has measurements, we need to add them to the map
-        const childAssetMeasurements = aggregateMeasurements(child) as Map<any, any>;
+        const childAssetMeasurements = aggregateMeasurements(child) as Map<any, any>
         for (const [date, occurences] of childAssetMeasurements.entries()) {
           if (newAggregateMeasurements.has(date)) {
-            const currentValue = newAggregateMeasurements.get(date);
-            newAggregateMeasurements.set(date, currentValue as number + occurences);
+            const currentValue = newAggregateMeasurements.get(date)
+            newAggregateMeasurements.set(date, (currentValue as number) + occurences)
           } else {
-            newAggregateMeasurements.set(date, occurences);
+            newAggregateMeasurements.set(date, occurences)
           }
         }
       }
     }
     return newAggregateMeasurements
   }
-  return new Map();
+  return new Map()
 }
 
 /**
  * this function takes a measurementValues object and groups them by the month and year
- * @param measurementValues 
- * @returns 
+ * @param measurementValues
+ * @returns
  */
 function groupByDate(measurementValues: Measurement['measurements']) {
-  const newMeasurements = new Map();
+  const newMeasurements = new Map()
 
   for (const date in measurementValues) {
-    const parsedDate = new Date(date);
-    const key = format(parsedDate, 'MMM yyyy');
+    const parsedDate = new Date(date)
+    const key = format(parsedDate, 'MMM yyyy')
     if (newMeasurements.has(key)) {
-      const keyValue = parseInt(newMeasurements.get(key));
-      newMeasurements.set(key, keyValue + measurementValues.get(date));
+      const keyValue = parseInt(newMeasurements.get(key))
+      newMeasurements.set(key, keyValue + measurementValues.get(date))
     } else {
       // @ts-ignore
-      newMeasurements.set(key, measurementValues[date]);
+      newMeasurements.set(key, measurementValues[date])
     }
   }
 
-  return newMeasurements;
+  return newMeasurements
 }

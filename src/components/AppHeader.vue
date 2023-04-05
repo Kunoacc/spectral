@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { LayoutHeader, Menu, TypographyText, Dropdown, MenuItem } from 'ant-design-vue'
 import { DownCircleOutlined, CheckCircleOutlined } from '@ant-design/icons-vue'
-import { useAppStateStore } from '@/stores/appState';
+import { useAppStateStore } from '@/stores/appState'
 
 const appState = useAppStateStore()
 
@@ -45,7 +45,7 @@ function handleMenuItemClick({ key }: any) {
   justify-content: center;
 
   &__active {
-    background-color: rgba(0 ,0, 0, 0.35);
+    background-color: rgba(0, 0, 0, 0.35);
     width: 2.5rem;
     height: 2.5rem;
     border-radius: 0.25rem;
@@ -58,7 +58,9 @@ function handleMenuItemClick({ key }: any) {
 
 <template>
   <LayoutHeader class="header">
-    <TypographyText strong class="text-white">Spectral</TypographyText>
+    <RouterLink to="/">
+      <TypographyText strong class="text-white"> Spectral </TypographyText>
+    </RouterLink>
     <Dropdown>
       <a @click.prevent class="text-white dropdown-title">
         <span>Change Theme</span>
@@ -66,16 +68,18 @@ function handleMenuItemClick({ key }: any) {
       </a>
 
       <template #overlay>
-        <Menu
-          defaultSelectedKeys="1" 
-          class="palette"
-          @click="handleMenuItemClick">
-          <MenuItem 
-            :key="index" v-for="(palette, index) in appState.colorPalettes" 
+        <Menu defaultSelectedKeys="1" class="palette" @click="handleMenuItemClick">
+          <MenuItem
+            :key="index"
+            v-for="(palette, index) in appState.colorPalettes"
             class="palette-item"
-            :style="{backgroundColor: palette.primaryColor}">
-            <div v-if="palette.primaryColor === appState.activePalette?.primaryColor" class="palette-item__active text-white">
-              <CheckCircleOutlined/>
+            :style="{ backgroundColor: palette.primaryColor }"
+          >
+            <div
+              v-if="palette.primaryColor === appState.activePalette?.primaryColor"
+              class="palette-item__active text-white"
+            >
+              <CheckCircleOutlined />
             </div>
           </MenuItem>
         </Menu>

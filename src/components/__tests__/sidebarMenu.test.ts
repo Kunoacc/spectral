@@ -3,44 +3,44 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import SidebarMenu from '../sidebarMenu.vue'
 import SidebarMenuItems from '../sidebarMenuItems.vue'
-import { Menu } from 'ant-design-vue';
-import { nextTick } from 'vue';
+import { Menu } from 'ant-design-vue'
+import { nextTick } from 'vue'
 
 describe('SidebarMenu', () => {
   const mockRouter = {
-    push: vi.fn(),
-  };
+    push: vi.fn()
+  }
 
   const mountSidebarMenu = () => {
     return mount(SidebarMenu, {
       global: {
         provide: {
-          router: mockRouter,
+          router: mockRouter
         },
         stubs: {
           SidebarMenuItems,
           LayoutSider: true,
-          Spin: true,
+          Spin: true
         },
         components: {
-          Menu,
-        },
-      },
-    });
-  };
+          Menu
+        }
+      }
+    })
+  }
 
   beforeEach(() => {
-    vi.clearAllMocks();
-  });
+    vi.clearAllMocks()
+  })
 
   it('renders the "Menu does not have items" message when menuItems is empty', async () => {
-    const wrapper = mountSidebarMenu();
-    await nextTick();
-    expect(wrapper.text()).toContain('Menu does not have items');
-  });
+    const wrapper = mountSidebarMenu()
+    await nextTick()
+    expect(wrapper.text()).toContain('Menu does not have items')
+  })
 
   it('renders the menu items when menuItems is not empty', async () => {
-    const wrapper = mountSidebarMenu();
+    const wrapper = mountSidebarMenu()
 
     await wrapper.setData({
       menuItems: {
@@ -48,33 +48,33 @@ describe('SidebarMenu', () => {
           {
             id: 1,
             name: 'Item 1',
-            children: [],
-          },
-        ],
-      },
-    });
-    await nextTick();
-    expect(wrapper.text()).toContain('Item 1');
-  });
+            children: []
+          }
+        ]
+      }
+    })
+    await nextTick()
+    expect(wrapper.text()).toContain('Item 1')
+  })
 
   it('calls router.push with the correct route when a menu item is clicked', async () => {
-    const wrapper = mountSidebarMenu();
+    const wrapper = mountSidebarMenu()
     await wrapper.setData({
       menuItems: {
         children: [
           {
             id: 1,
             name: 'Item 1',
-            children: [],
-          },
-        ],
-      },
-    });
+            children: []
+          }
+        ]
+      }
+    })
 
-    await nextTick();
-    wrapper.findComponent(Menu).vm.$emit('click', { key: 1 });
+    await nextTick()
+    wrapper.findComponent(Menu).vm.$emit('click', { key: 1 })
 
-    expect(mockRouter.push).toHaveBeenCalledTimes(1);
-    expect(mockRouter.push).toHaveBeenCalledWith('/assets/1');
-  });
-});
+    expect(mockRouter.push).toHaveBeenCalledTimes(1)
+    expect(mockRouter.push).toHaveBeenCalledWith('/assets/1')
+  })
+})

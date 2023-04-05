@@ -1,7 +1,5 @@
 # spectral
 
-This is a test for Spectral.
-
 For the project, we used Ant Design Vue & Chart.js
 
 ## Project Setup

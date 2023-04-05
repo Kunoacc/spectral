@@ -11,7 +11,6 @@ const useRouterMock = {
 }
 
 describe('SidebarMenu', () => {
-
   vi.mock('vue-router', () => ({
     useRouter: () => useRouterMock
   }))
@@ -21,15 +20,18 @@ describe('SidebarMenu', () => {
   }))
 
   vi.mock('@/stores/assets', () => ({
-    useAssetsStore: () => assetStoreMock,
+    useAssetsStore: () => assetStoreMock
   }))
 
   const mountSidebarMenu = () => {
     return mount(SidebarMenu, {
       global: {
         components: {
-          Menu, SidebarMenuItems, LayoutSider, Spin
-        },
+          Menu,
+          SidebarMenuItems,
+          LayoutSider,
+          Spin
+        }
       }
     })
   }
@@ -45,8 +47,8 @@ describe('SidebarMenu', () => {
   })
 
   it('renders the menu items when menuItems is not empty', async () => {
-    const wrapper = mountSidebarMenu();
-    const vm = wrapper.vm as any;
+    const wrapper = mountSidebarMenu()
+    const vm = wrapper.vm as any
     vm.assetStore.assets.push({
       id: 0,
       name: 'Item 1',
@@ -58,7 +60,7 @@ describe('SidebarMenu', () => {
 
   it('calls router.push with the correct route when a menu item is clicked', async () => {
     const wrapper = mountSidebarMenu()
-    const vm = wrapper.vm as any;
+    const vm = wrapper.vm as any
     vm.assetStore.assets.push({
       id: 0,
       name: 'Item 1',

@@ -1,14 +1,14 @@
-import { vi } from "vitest";
+import { vi } from 'vitest'
 
 export const measurementsStoreMock = {
-  measurements: [],
-};
+  measurements: []
+}
 
 export const assetStoreMock = {
   assets: [],
-  selectedAsset: null,
-};
+  selectedAsset: null
+}
 
 export const appStateStoreMock: {} = {
   isLoading: vi.fn(() => false)
-};
+}

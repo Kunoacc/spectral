@@ -6,7 +6,7 @@ import AppHeader from '@/components/AppHeader.vue'
 
 <style lang="scss">
 .text-white {
-  color: #fff;
+  color: #fff !important;
 }
 </style>
 

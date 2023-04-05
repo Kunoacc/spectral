@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import DefaultLayout from './layouts/defaultLayout.vue';
+import DefaultLayout from './layouts/DefaultLayout.vue';
 DefaultLayout
 </script>
 

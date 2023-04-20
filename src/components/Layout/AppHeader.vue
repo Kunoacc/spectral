@@ -5,19 +5,12 @@ import { useAppStateStore } from '@/stores/appState'
 
 const appState = useAppStateStore()
 
-function handleMenuItemClick({ key }: any) {
+const handleMenuItemClick = ({ key }: any) => {
   appState.setPalette(key)
 }
 </script>
 
 <style lang="scss" scoped>
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 1rem;
-}
-
 .dropdown-title {
   padding: 0 1rem;
   display: grid;
@@ -25,16 +18,23 @@ function handleMenuItemClick({ key }: any) {
   align-items: center;
   gap: 0.5rem;
 }
+</style>
 
+<style lang="scss">
 .palette {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.5rem;
-  padding: 1rem;
+  padding: 1rem !important;
 }
-</style>
 
-<style lang="scss">
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
 .palette-item {
   width: 3rem;
   height: 3rem;

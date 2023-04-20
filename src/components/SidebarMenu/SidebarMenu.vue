@@ -22,11 +22,11 @@ const selectedMenuItem = computed(() => {
   return [assetStore.selectedAsset.id as number]
 })
 
-function handleMenuItemClick({ key }: any) {
+const handleMenuItemClick = ({ key }: any) => {
   push(`/assets/${key}`)
 }
 
-function handleSubMenuItemClick(e: MouseEvent, key: Key) {
+const handleSubMenuItemClick = (e: MouseEvent, key: Key) => {
   if (key !== assetStore.selectedAsset?.id) push(`/assets/${key}`)
 }
 </script>

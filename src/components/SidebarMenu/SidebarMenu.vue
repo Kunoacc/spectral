@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Menu, LayoutSider, Spin } from 'ant-design-vue'
 import { computed } from 'vue'
-import SidebarMenuItems from './SidebarMenuItems.vue'
+import SidebarMenuItems from '../SidebarMenuItems/SidebarMenuItems.vue'
 import { useMeasurementsStore } from '@/stores/measurements'
 import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements'
 import { combineAssetsAndMeasurements } from '@/helpers/aggregateMeasurements'

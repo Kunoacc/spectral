@@ -5,7 +5,7 @@ declare module 'chart.js' {
     lineWithLine: {
       chartOptions: CoreChartOptions<'lineWithLine'>
       datasetOptions: LineWithLineControllerDatasetOptions
-      defaultDataPoint: number[]
+      defaultDataPoint: number
       parsedDataType: number[]
       scales: never
     }

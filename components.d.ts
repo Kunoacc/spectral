@@ -9,11 +9,11 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AppHeader: typeof import('./src/components/AppHeader.vue')['default']
+    AppHeader: typeof import('./src/components/Layout/AppHeader.vue')['default']
     LineChart: typeof import('./src/components/LineChart/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    SidebarMenu: typeof import('./src/components/SidebarMenu.vue')['default']
-    SidebarMenuItems: typeof import('./src/components/SidebarMenuItems.vue')['default']
+    SidebarMenu: typeof import('./src/components/SidebarMenu/SidebarMenu.vue')['default']
+    SidebarMenuItems: typeof import('./src/components/SidebarMenuItems/SidebarMenuItems.vue')['default']
   }
 }

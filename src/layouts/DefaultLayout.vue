@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Layout, LayoutContent } from 'ant-design-vue'
-import SidebarMenu from '@/components/SidebarMenu.vue'
-import AppHeader from '@/components/AppHeader.vue'
+import SidebarMenu from '@/components/SidebarMenu/SidebarMenu.vue'
+import AppHeader from '@/components/Layout/AppHeader.vue'
 </script>
 
 <style lang="scss">

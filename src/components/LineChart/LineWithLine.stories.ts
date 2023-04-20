@@ -10,20 +10,49 @@ const defaultChartData: ChartData<'lineWithLine'> = {
       data: [12, 19, 3, 5],
       borderColor: 'rgba(75, 192, 192, 1)',
       borderWidth: 2,
+      fill: false,
+      backgroundColor: 'transparent',
+      pointRadius: 2,
+      showLine: true,
+      tension: 0.4,
+      spanGaps: true
     },
   ],
 };
 
 const defaultChartOptions: ChartOptions<'line'> = {
   responsive: true,
+  maintainAspectRatio: false,
   scales: {
-    x: {
-      beginAtZero: true,
+    xAxis: {
+      grid: {
+        drawBorder: false,
+        display: false
+      },
+      ticks: {
+        maxTicksLimit: 10,
+        minRotation: 30,
+        maxRotation: 30,
+        padding: 8,
+        autoSkip: false
+      }
     },
-    y: {
-      beginAtZero: true,
+    yAxis: {
+      ticks: {
+        padding: 6
+      },
+    }
+   },
+  plugins: {
+    legend: {
+      display: false
     },
-  },
+    tooltip: {
+      enabled: true,
+      mode: 'index',
+      intersect: false
+    }
+  }
 };
 
 const meta: Meta<typeof LineWithLine> = {

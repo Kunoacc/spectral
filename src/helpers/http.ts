@@ -1,4 +1,5 @@
 import { API_BASE_URL } from '@/constants'
+import { errorLogger } from './errorLogger'
 
 export interface HttpResponse<T> extends Response {
   parsedBody?: T
@@ -82,7 +83,7 @@ export async function get<T>(
     }
   }
 
-  return await http<T>(new Request(url.toString(), args))
+  return await errorLogger(() => http<T>(new Request(url.toString(), args)))
 }
 
 /**
@@ -116,7 +117,7 @@ export async function post<T, E>(
     shouldIncludeBaseUrl ? API_BASE_URL : undefined
   )
 
-  return await http<T>(new Request(url.toString(), args))
+  return await errorLogger(() => http<T>(new Request(url.toString(), args)))
 }
 
 /**
@@ -148,5 +149,5 @@ export async function patch<T, E>(
     typeof path === 'string' ? path : path(API_BASE_URL),
     shouldIncludeBaseUrl ? API_BASE_URL : undefined
   )
-  return await http<T>(new Request(url.toString(), args))
+  return await errorLogger(() => http<T>(new Request(url.toString(), args)))
 }

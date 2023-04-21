@@ -8,25 +8,24 @@ import type { AssetTree, Assets } from '@/interfaces/asset.interface'
 export function convertToNested(array: Assets): AssetTree {
   // define a new map to store the elements of the array with their id as key
   const dictionary = new Map<number, AssetTree>()
-
   for (const asset of array) {
     dictionary.set(asset.id, {
       ...asset,
       children: [],
-      isChild: asset.parentId !== undefined
+      isChild: asset.parentId !== null
     })
   }
 
   // step through the array again and add the children to their parents
   for (const asset of array) {
-    if (asset.parentId !== undefined) {
-      const parent = dictionary.get(asset.parentId)
+    if (asset.name !== null) {
+      const parent = dictionary.get(asset.parentId as number)
       if (parent) {
         parent?.children?.push({
           ...asset,
           children: dictionary.get(asset.id)?.children || []
         })
-        dictionary.set(asset.parentId, parent)
+        dictionary.set(asset.parentId as number, parent)
       }
     }
   }

@@ -1,4 +1,8 @@
 <script lang="ts" setup>
+import type { ChartData } from 'chart.js'
+import { computed, ref, watch } from 'vue'
+import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { Spin } from 'ant-design-vue'
 import LineChart from '@/components/LineChart/index.vue'
 import {
   aggregateMeasurements,
@@ -9,14 +13,20 @@ import { traverseData } from '@/helpers/traverseData'
 import { useAppStateStore } from '@/stores/appState'
 import { useAssetsStore } from '@/stores/assets'
 import { useMeasurementsStore } from '@/stores/measurements'
-import type { ChartData } from 'chart.js'
-import { computed, ref, watch } from 'vue'
-import { onBeforeRouteLeave, useRoute } from 'vue-router'
+import { useComputedLoadingState } from '@/composables/useComputedLoadingState'
+import { storeToRefs } from 'pinia'
 
 const route = useRoute()
 const assetsStore = useAssetsStore()
+const { assets } = storeToRefs(assetsStore)
+
 const measurementStore = useMeasurementsStore()
+const { measurements } = storeToRefs(measurementStore)
+
 const appStateStore = useAppStateStore()
+const { completePalette } = storeToRefs(appStateStore)
+
+const { isLoading } = useComputedLoadingState([useAssetsStore, useMeasurementsStore])
 
 const defaultAssetIndex = ref(parseInt(route.params?.id as string) || 0)
 
@@ -67,7 +77,7 @@ const chartOptions = ref({
 
 // combine assets and measurements into a single object
 const assetAndMeaurements = computed(() =>
-  combineAssetsAndMeasurements(assetsStore.assets, measurementStore.measurements)
+  combineAssetsAndMeasurements(assets.value, measurements.value)
 )
 
 // traverse the combined object to get the selected asset
@@ -83,33 +93,33 @@ const processedData = computed(() =>
 // set chart labels with bounds of the largest and smallest numbers in data and 10 steps
 const chartData = computed(
   () =>
-    ({
-      labels: Array.from(processedData.value?.keys())?.map(
-        (value: any, index: number, array: any[]) => {
-          const availableLabelSlots = 10
-          const labelSlot = Math.ceil(array.length / availableLabelSlots)
-          if (index % labelSlot === 0 || index === 0) {
-            return value
-          } else {
-            ;('')
-          }
+  ({
+    labels: Array.from(processedData.value?.keys())?.map(
+      (value: any, index: number, array: any[]) => {
+        const availableLabelSlots = 10
+        const labelSlot = Math.ceil(array.length / availableLabelSlots)
+        if (index % labelSlot === 0 || index === 0) {
+          return value
+        } else {
+          ; ('')
         }
-      ),
-      datasets: [
-        {
-          label: selectedAsset.value?.name,
-          data: Array.from(processedData.value?.values()),
-          fill: false,
-          borderWidth: 2,
-          borderColor: appStateStore.completePalette.primaryColor,
-          backgroundColor: 'transparent',
-          pointRadius: 2,
-          showLine: true,
-          tension: 0.4,
-          spanGaps: true
-        }
-      ]
-    } as ChartData<'lineWithLine'>)
+      }
+    ),
+    datasets: [
+      {
+        label: selectedAsset.value?.name,
+        data: Array.from(processedData.value?.values()),
+        fill: false,
+        borderWidth: 2,
+        borderColor: completePalette.value.primaryColor,
+        backgroundColor: 'transparent',
+        pointRadius: 2,
+        showLine: true,
+        tension: 0.4,
+        spanGaps: true
+      }
+    ]
+  } as ChartData<'lineWithLine'>)
 )
 
 // set chart y-axis ticks with bounds of the largest and smallest numbers in data and 5 steps
@@ -186,14 +196,13 @@ onBeforeRouteLeave(() => {
 </style>
 
 <template>
-  <div class="container">
-    <h2 class="page-title">{{ selectedAsset?.name }}</h2>
-    <LineChart :chart-data="chartData" :chart-options="chartOptions" class="page-chart" />
-    <small
-      class="page-chart-helper"
-      v-if="!selectedAsset?.measurements.size && selectedAsset?.children.length"
-    >
-      This chart has no data, instead the sum of it's children is used
-    </small>
-  </div>
+  <Spin :spinning="isLoading">
+    <div class="container">
+      <h2 class="page-title">{{ selectedAsset?.name }}</h2>
+      <LineChart :chart-data="chartData" :chart-options="chartOptions" class="page-chart" />
+      <small class="page-chart-helper" v-if="!selectedAsset?.measurements.size && selectedAsset?.children.length">
+        This chart has no data, instead the sum of it's children is used
+      </small>
+    </div>
+  </Spin>
 </template>

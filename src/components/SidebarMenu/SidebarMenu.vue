@@ -1,20 +1,30 @@
 <script lang="ts" setup>
 import { Menu, LayoutSider, Spin } from 'ant-design-vue'
 import { computed } from 'vue'
-import SidebarMenuItems from '../SidebarMenuItems/SidebarMenuItems.vue'
-import { useMeasurementsStore } from '@/stores/measurements'
-import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements'
-import { combineAssetsAndMeasurements } from '@/helpers/aggregateMeasurements'
-import { useAssetsStore } from '@/stores/assets'
 import { useRouter } from 'vue-router'
 import type { Key } from 'ant-design-vue/lib/_util/type'
+import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements'
+import SidebarMenuItems from '../SidebarMenuItems/SidebarMenuItems.vue'
+import { useMeasurementsStore } from '@/stores/measurements'
+import { combineAssetsAndMeasurements } from '@/helpers/aggregateMeasurements'
+import { useAssetsStore } from '@/stores/assets'
+import { useComputedLoadingState } from '@/composables/useComputedLoadingState' 
+import { storeToRefs } from 'pinia'
 
 const measurementsStore = useMeasurementsStore()
+const { measurements } = storeToRefs(measurementsStore)
+
 const assetStore = useAssetsStore()
+const { assets } = storeToRefs(assetStore)
+
 const { push } = useRouter()
 
+const { isLoading } = useComputedLoadingState([
+  useMeasurementsStore, useAssetsStore
+])
+
 const menuItems = computed(() =>
-  combineAssetsAndMeasurements(assetStore.assets, measurementsStore.measurements)
+  combineAssetsAndMeasurements(assets.value, measurements.value)
 )
 
 const selectedMenuItem = computed(() => {
@@ -38,7 +48,7 @@ const handleSubMenuItemClick = (e: MouseEvent, key: Key) => {
 </style>
 
 <template>
-  <Spin :spinning="false">
+  <Spin :spinning="isLoading">
     <LayoutSider>
       <div v-if="!menuItems?.children?.length" class="light">
         <p>Menu does not have items</p>

@@ -1,11 +1,10 @@
 import { Api } from '@/api'
-import data from '@/data'
 import type { AssetTreeMeasurements } from '@/helpers/aggregateMeasurements'
 import type { Assets } from '@/interfaces/asset.interface'
-import { defineStore } from 'pinia'
 import { onMounted, ref } from 'vue'
+import { createLoadableStore } from './utils/createLoadableStore'
 
-export const useAssetsStore = defineStore('assets', () => {
+const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>>) => {
   const assets = ref([] as Assets)
 
   const selectedAsset = ref(null as AssetTreeMeasurements | null)
@@ -15,10 +14,12 @@ export const useAssetsStore = defineStore('assets', () => {
   }
 
   async function fetchAssets() {
-    // we could use this to fetch from an API
-    // assets.value = await Api.assets.getAll()
+    await context.withLoading(async () => {
+      assets.value = await Api.assets.getAll()
+    })
 
-    assets.value = [...data.assets]
+    // we could use this to fetch from a local file
+    // assets.value = [...data.assets]
   }
 
   onMounted(async () => await fetchAssets())
@@ -29,4 +30,7 @@ export const useAssetsStore = defineStore('assets', () => {
     selectedAsset,
     setSelectedAsset
   }
-})
+}
+
+export const useAssetsStore =
+  createLoadableStore<ReturnType<typeof storeFactory>>('assets', storeFactory)

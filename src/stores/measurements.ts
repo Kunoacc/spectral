@@ -1,17 +1,17 @@
 import { Api } from '@/api'
-import data from '@/data'
 import type { Measurements } from '@/interfaces/measurements.interface'
-import { defineStore } from 'pinia'
 import { onMounted, ref } from 'vue'
+import { createLoadableStore } from './utils/createLoadableStore'
 
-export const useMeasurementsStore = defineStore('measurements', () => {
+const storeFactory = (context: ReturnType<ReturnType<typeof createLoadableStore>>) => {
   const measurements = ref([] as Measurements)
 
   async function fetchMeasurements() {
-    // we could use this to fetch from an API
-    // measurements.value = await Api.measurements.getAll()
-
-    measurements.value = [...data.measurements]
+    await context.withLoading(async () => {
+      measurements.value = await Api.measurements.getAll()
+    })
+    // we could use this to fetch from a local file
+    // measurements.value = [...data.measurements]
   }
 
   onMounted(async () => await fetchMeasurements())
@@ -20,4 +20,7 @@ export const useMeasurementsStore = defineStore('measurements', () => {
     measurements,
     fetchMeasurements
   }
-})
+}
+
+export const useMeasurementsStore =
+  createLoadableStore<ReturnType<typeof storeFactory>>('measurements', storeFactory)

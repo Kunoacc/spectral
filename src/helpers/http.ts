@@ -38,16 +38,17 @@ export type ClientPatch = <T, E>(
  * @returns A promisified instance of `HttpResponse`
  */
 export async function http<T>(request: RequestInfo): Promise<HttpResponse<T>> {
-  const response: HttpResponse<T> = await fetch(request)
-  //@ts-ignore
-  response.parsedBody = await response.json()
+  return await errorLogger(async () => {
+    const response: HttpResponse<T> = await fetch(request)
+    //@ts-ignore
+    response.parsedBody = await response.json()
 
-  if (!response.ok) {
-    console.error(response.parsedBody)
-    throw response.parsedBody
-  }
+    if (!response.ok) {
+      throw response.parsedBody
+    }
 
-  return response
+    return response
+  })
 }
 
 /**
@@ -83,7 +84,7 @@ export async function get<T>(
     }
   }
 
-  return await errorLogger(() => http<T>(new Request(url.toString(), args)))
+  return await http<T>(new Request(url.toString(), args))
 }
 
 /**
@@ -117,7 +118,7 @@ export async function post<T, E>(
     shouldIncludeBaseUrl ? API_BASE_URL : undefined
   )
 
-  return await errorLogger(() => http<T>(new Request(url.toString(), args)))
+  return await http<T>(new Request(url.toString(), args))
 }
 
 /**
@@ -149,5 +150,5 @@ export async function patch<T, E>(
     typeof path === 'string' ? path : path(API_BASE_URL),
     shouldIncludeBaseUrl ? API_BASE_URL : undefined
   )
-  return await errorLogger(() => http<T>(new Request(url.toString(), args)))
+  return await http<T>(new Request(url.toString(), args))
 }
